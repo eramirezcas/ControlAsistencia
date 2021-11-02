@@ -1,0 +1,355 @@
+﻿-----------------------------------------------------
+ ESTE ES EL ARCHIVO DE NOTAS VARIAS PARA EL SISTEMA
+ ESTO ES SOLO PARA EL QUE EN ALGUN MOMENTO DE LA
+ HISTORIA NESECITE REALIZAR MODIFICACIONES
+-----------------------------------------------------
+
+
+Este es el query que me saca el monto real de las cuentas consultadas
+-------------------------------------------------------------------------------------------------------------------------
+DECLARE @P1 DATETIME --llamese inicio de periodo
+DECLARE @P2 DATETIME--llamese hasta la fecha
+DECLARE @p4 INT  -- llamese escenario [Se utiliza el max por que actualmente solo se utiliza un escenario en la compañia]
+
+SET @P1=CONVERT(DATETIME,'FINICIAL',103)
+SET @P2=CONVERT(DATETIME,'FFINAL',103)
+set @p4=(SELECT MAX(AbsId) AS Escenario FROM CRCC.DBO.OBGS)
+
+SELECT
+	OACT.AcctName as Cuenta,
+	JDT1.Account as Numero,
+	SUM(JDT1.Debit) as Debitos,
+	SUM(JDT1.Credit) as Creditos,
+	SUM(JDT1.Credit-JDT1.Debit) as Total,
+	0 as Presupuesto,
+	0 as Diferencia
+FROM CRCC.DBO.JDT1 AS JDT1 INNER JOIN 
+	CRCC.DBO.OACT AS OACT ON OACT.AcctCode = JDT1.Account
+WHERE (JDT1.RefDate BETWEEN @P1 AND @P2) AND
+	(JDT1.TransType <> -3) AND
+	(JDT1.SourceLine <> 8 OR JDT1.SourceLine IS NULL)
+GROUP BY OACT.AcctName,JDT1.Account
+ORDER BY JDT1.Account 
+-------------------------------------------------------------------------------------------------------------------------
+
+
+
+Este es el query que me saca el monto real de las cuentas de presupuesto consultadas
+-------------------------------------------------------------------------------------------------------------------------
+DECLARE @p4 INT -- llamese numero de escenario
+set @p4=(SELECT MAX(AbsId) AS Escenario FROM CRCC.DBO.OBGS)
+
+SELECT T1.Line_ID as mes, t1.BudgId, T0.Instance, T0.AcctCode, T1.DebLTotal as debitos, T1.CredLTotal as creditos
+FROM CRCC.DBO.OBGT AS T0 INNER JOIN 
+	CRCC.DBO.BGT1 T1 ON T0.AbsId = T1.BudgId INNER JOIN 
+	CRCC.DBO.OBGS T2 ON T0.Instance = T2.AbsId 
+WHERE (T0.Instance=@p4)
+-------------------------------------------------------------------------------------------------------------------------
+
+
+
+Este es el query que me saca la lista de escenarios
+-------------------------------------------------------------------------------------------------------------------------
+SELECT MAX(AbsId) AS Escenario FROM CRCC.DBO.OBGS -- Se utiliza el max por que actualmente solo se 
+																	-- utiliza un escenario en la compañia
+-------------------------------------------------------------------------------------------------------------------------
+
+
+
+Este son los querys que me sacan las cuentas asignadas a un departamento para la parte de planillas
+-------------------------------------------------------------------------------------------------------------------------
+SELECT NUMEROCUENTA FROM SCGPLACRCC.dbo.SCGPL_DETALLE_CTS_CONTABLES
+WHERE CODTIPO = 37 AND CONFIGURACION_DE = 1 AND CODESPECIFICACION = 2
+
+-- CONFIGURACION_DE
+--	Selecciona la cuenta no la contra-cuenta
+
+-- CODTIPO
+--	Código del departamento del empleado en SAP
+
+-- CODESPECIFICACION
+--	 2-Horas Sencillas
+--	 7-Horas Dobles
+--	 8-Horas Extra
+--	23-Horas Feriado
+-------------------------------------------------------------------------------------------------------------------------
+
+
+"&Archivo"
+"Cerrar sesión"
+"&Salir"
+"&Marcas"
+"Justificación de Marcas"
+"Reporte de marcas"
+"Reporte de marcas (Café/Almuerzo)"
+"Marcas del día"
+"Pre-Justificaciones"
+"Justificaciones históricas"
+"Consulta de personal sin horario"
+"Generar cargador"
+"&Extras"
+"Procesos de jefatura"
+"Registro de extras"
+"Enviar extras a aprobación de gerente"
+"Procesos de gerente"
+"Aprobación/Rechazo de extras"
+"Procesos de RRHH"
+"Aprobación/Rechazo de extras"
+"Procesos de planilla"
+"Importar registros aprobados por RRHH"
+"Procesar registros de extras"
+"&Vacaciones"
+"Consultar vacaciones"
+"Con&figuración"
+"Cambio de clave"
+"Mantenimiento de usuarios"
+"Definición de permisos"
+"Mantenimiento de jefes de sección"
+"Mantenimiento de tipos horario"
+"Asignación de horarios"
+"&Utilitarios"
+"Enviar marcas al histórico"
+"Enviar extras al histórico"
+"Registrar huella digital"
+
+----------------------------------------------------------------------------------------------------------------------
+query para Reporte de hporas extra mensual para conta
+----------------------------------------------------------------------------------------------------------------------
+"use SOFTLAND" & vbNewLine & _
+"" & vbNewLine & _
+"SELECT " & vbNewLine & _
+"	 Hor.DEPARTAMENTO" & vbNewLine & _
+"	,Hor.SECCION" & vbNewLine & _
+"	,Hor.PUESTO" & vbNewLine & _
+"	,Hor.EMPLEADO" & vbNewLine & _
+"	,Hor.NOMBRE" & vbNewLine & _
+"	,Hor.IDENTIFICACION" & vbNewLine & _
+"	,Hor.SALARIO_REFERENCIA" & vbNewLine & _
+"	,CASE WHEN Hor.[201910] IS NULL THEN 0 ELSE Hor.[201910] END AS [201910]" & vbNewLine & _
+"	,CASE WHEN MON.[201910] IS NULL THEN 0 ELSE MON.[201910] END AS [201910]" & vbNewLine & _
+"	,CASE WHEN Hor.[201911] IS NULL THEN 0 ELSE Hor.[201911] END AS [201911]" & vbNewLine & _
+"	,CASE WHEN MON.[201911] IS NULL THEN 0 ELSE MON.[201911] END AS [201911]" & vbNewLine & _
+"	,CASE WHEN Hor.[201912] IS NULL THEN 0 ELSE Hor.[201912] END AS [201912]" & vbNewLine & _
+"	,CASE WHEN MON.[201912] IS NULL THEN 0 ELSE MON.[201912] END AS [201912]" & vbNewLine & _
+"	,CASE WHEN Hor.[20201] IS NULL THEN 0 ELSE Hor.[20201] END AS [20201]" & vbNewLine & _
+"	,CASE WHEN MON.[20201] IS NULL THEN 0 ELSE MON.[20201] END AS [20201]" & vbNewLine & _
+"	,CASE WHEN Hor.[20202] IS NULL THEN 0 ELSE Hor.[20202] END AS [20202]" & vbNewLine & _
+"	,CASE WHEN MON.[20202] IS NULL THEN 0 ELSE MON.[20202] END AS [20202]" & vbNewLine & _
+"	,CASE WHEN Hor.[20203] IS NULL THEN 0 ELSE Hor.[20203] END AS [20203]" & vbNewLine & _
+"	,CASE WHEN MON.[20203] IS NULL THEN 0 ELSE MON.[20203] END AS [20203]" & vbNewLine & _
+"	,CASE WHEN Hor.[20204] IS NULL THEN 0 ELSE Hor.[20204] END AS [20204]" & vbNewLine & _
+"	,CASE WHEN MON.[20204] IS NULL THEN 0 ELSE MON.[20204] END AS [20204]" & vbNewLine & _
+"	,CASE WHEN Hor.[20205] IS NULL THEN 0 ELSE Hor.[20205] END AS [20205]" & vbNewLine & _
+"	,CASE WHEN MON.[20205] IS NULL THEN 0 ELSE MON.[20205] END AS [20205]" & vbNewLine & _
+"	,CASE WHEN Hor.[20206] IS NULL THEN 0 ELSE Hor.[20206] END AS [20206]" & vbNewLine & _
+"	,CASE WHEN MON.[20206] IS NULL THEN 0 ELSE MON.[20206] END AS [20206]" & vbNewLine & _
+"	,CASE WHEN Hor.[20207] IS NULL THEN 0 ELSE Hor.[20207] END AS [20207]" & vbNewLine & _
+"	,CASE WHEN MON.[20207] IS NULL THEN 0 ELSE MON.[20207] END AS [20207]" & vbNewLine & _
+"	,CASE WHEN Hor.[20208] IS NULL THEN 0 ELSE Hor.[20208] END AS [20208]" & vbNewLine & _
+"	,CASE WHEN MON.[20208] IS NULL THEN 0 ELSE MON.[20208] END AS [20208]" & vbNewLine & _
+"	,CASE WHEN Hor.[20209] IS NULL THEN 0 ELSE Hor.[20209] END AS [20209]" & vbNewLine & _
+"	,CASE WHEN MON.[20209] IS NULL THEN 0 ELSE MON.[20209] END AS [20209]" & vbNewLine & _
+"FROM " & vbNewLine & _
+"(" & vbNewLine & _
+"	Select pvt.* " & vbNewLine & _
+"	from" & vbNewLine & _
+"	(	" & vbNewLine & _
+"		select a.*" & vbNewLine & _
+"			,b.mes" & vbNewLine & _
+"			,b.horasmes" & vbNewLine & _
+"		from" & vbNewLine & _
+"		(	" & vbNewLine & _
+"			SELECT DISTINCT CRCC01.DEPARTAMENTO.DESCRIPCION AS DEPARTAMENTO" & vbNewLine & _
+"				,CRCC01.CENTRO_COSTO.DESCRIPCION AS SECCION" & vbNewLine & _
+"				,UPPER(CRCC01.PUESTO.DESCRIPCION) AS PUESTO" & vbNewLine & _
+"				,CRCC01.EMPLEADO_CONC_NOMI.EMPLEADO" & vbNewLine & _
+"				,CRCC01.EMPLEADO.NOMBRE" & vbNewLine & _
+"				,CRCC01.EMPLEADO.IDENTIFICACION" & vbNewLine & _
+"				,CRCC01.EMPLEADO.SALARIO_REFERENCIA" & vbNewLine & _
+"			FROM CRCC01.EMPLEADO_CONC_NOMI" & vbNewLine & _
+"				INNER JOIN CRCC01.EMPLEADO ON CRCC01.EMPLEADO_CONC_NOMI.EMPLEADO = CRCC01.EMPLEADO.EMPLEADO" & vbNewLine & _
+"				INNER JOIN CRCC01.CENTRO_COSTO ON CRCC01.EMPLEADO.CENTRO_COSTO = CRCC01.CENTRO_COSTO.CENTRO_COSTO" & vbNewLine & _
+"				INNER JOIN CRCC01.DEPARTAMENTO ON CRCC01.EMPLEADO.DEPARTAMENTO = CRCC01.DEPARTAMENTO.DEPARTAMENTO" & vbNewLine & _
+"				INNER JOIN CRCC01.PUESTO ON CRCC01.EMPLEADO.PUESTO = CRCC01.PUESTO.PUESTO" & vbNewLine & _
+"			WHERE (CRCC01.EMPLEADO_CONC_NOMI.NOMINA = 'QUIN')" & vbNewLine & _
+"				AND (CRCC01.EMPLEADO_CONC_NOMI.CONCEPTO in ('QUIN-B005','QUIN-B011','QUIN-B015','QUIN-B023'))" & vbNewLine & _
+"		) as A inner join" & vbNewLine & _
+"		(" & vbNewLine & _
+"			SELECT ecn.EMPLEADO" & vbNewLine & _
+"				,CONVERT(CHAR(4),YEAR(nh.FECHA_INICIO)) + CONVERT(CHAR(2),MONTH(nh.FECHA_INICIO)) AS MES" & vbNewLine & _
+"				,SUM(ecn.TOTAL) / SUM(ecn.CANTIDAD) AS hora" & vbNewLine & _
+"				,SUM(ecn.TOTAL) AS MONTO_EXT" & vbNewLine & _
+"				,SUM(ecn.CANTIDAD) AS horasmes" & vbNewLine & _
+"			FROM CRCC01.empleado_conc_nomi AS ecn" & vbNewLine & _
+"				INNER JOIN CRCC01.nomina_historico AS nh ON ecn.NUMERO_NOMINA = nh.NUMERO_NOMINA" & vbNewLine & _
+"					AND ecn.NOMINA = nh.NOMINA" & vbNewLine & _
+"			WHERE ecn.nomina = 'QUIN'" & vbNewLine & _
+"				AND ecn.CONCEPTO in ('QUIN-B005','QUIN-B011','QUIN-B015','QUIN-B023')" & vbNewLine & _
+"				AND ecn.numero_nomina BETWEEN 117 AND 200" & vbNewLine & _
+"				AND ecn.EMPLEADO IN (" & vbNewLine & _
+"					SELECT DISTINCT EMPLEADO FROM CRCC01.empleado_conc_nomi" & vbNewLine & _
+"					WHERE nomina = 'QUIN' AND concepto in ('QUIN-B005','QUIN-B011','QUIN-B015','QUIN-B023')" & vbNewLine & _
+"					)" & vbNewLine & _
+"			GROUP BY ecn.EMPLEADO" & vbNewLine & _
+"				,CONVERT(CHAR(4),YEAR(nh.FECHA_INICIO)) + CONVERT(CHAR(2),MONTH(nh.FECHA_INICIO))" & vbNewLine & _
+"		) as b on a.EMPLEADO = b.EMPLEADO" & vbNewLine & _
+"	) as C" & vbNewLine & _
+"	pivot" & vbNewLine & _
+"	(sum(horasmes) for mes in ([201910],[201911],[201912],[20201],[20202],[20203],[20204],[20205],[20206],[20207],[20208],[20209])) as pvt" & vbNewLine & _
+") as Hor" & vbNewLine & _
+"	inner join" & vbNewLine & _
+"(" & vbNewLine & _
+"	Select pvt.*" & vbNewLine & _ 
+"	from" & vbNewLine & _
+"	(" & vbNewLine & _	
+"		select a.*" & vbNewLine & _
+"			,b.mes" & vbNewLine & _
+"			,b.MONTO_EXT" & vbNewLine & _
+"		from" & vbNewLine & _
+"		(" & vbNewLine & _	
+"			SELECT DISTINCT CRCC01.DEPARTAMENTO.DESCRIPCION AS DEPARTAMENTO" & vbNewLine & _
+"				,CRCC01.CENTRO_COSTO.DESCRIPCION AS SECCION" & vbNewLine & _
+"				,UPPER(CRCC01.PUESTO.DESCRIPCION) AS PUESTO" & vbNewLine & _
+"				,CRCC01.EMPLEADO_CONC_NOMI.EMPLEADO" & vbNewLine & _
+"				,CRCC01.EMPLEADO.NOMBRE" & vbNewLine & _
+"				,CRCC01.EMPLEADO.IDENTIFICACION" & vbNewLine & _
+"				,CRCC01.EMPLEADO.SALARIO_REFERENCIA" & vbNewLine & _
+"			FROM CRCC01.EMPLEADO_CONC_NOMI" & vbNewLine & _
+"				INNER JOIN CRCC01.EMPLEADO ON CRCC01.EMPLEADO_CONC_NOMI.EMPLEADO = CRCC01.EMPLEADO.EMPLEADO" & vbNewLine & _
+"				INNER JOIN CRCC01.CENTRO_COSTO ON CRCC01.EMPLEADO.CENTRO_COSTO = CRCC01.CENTRO_COSTO.CENTRO_COSTO" & vbNewLine & _
+"				INNER JOIN CRCC01.DEPARTAMENTO ON CRCC01.EMPLEADO.DEPARTAMENTO = CRCC01.DEPARTAMENTO.DEPARTAMENTO" & vbNewLine & _
+"				INNER JOIN CRCC01.PUESTO ON CRCC01.EMPLEADO.PUESTO = CRCC01.PUESTO.PUESTO" & vbNewLine & _
+"			WHERE (CRCC01.EMPLEADO_CONC_NOMI.NOMINA = 'QUIN')" & vbNewLine & _
+"				AND (CRCC01.EMPLEADO_CONC_NOMI.CONCEPTO in ('QUIN-B005','QUIN-B011','QUIN-B015','QUIN-B023'))" & vbNewLine & _
+"		) as A inner join" & vbNewLine & _
+"		(" & vbNewLine & _
+"			SELECT ecn.EMPLEADO" & vbNewLine & _
+"				,CONVERT(CHAR(4),YEAR(nh.FECHA_INICIO)) + CONVERT(CHAR(2),MONTH(nh.FECHA_INICIO)) AS MES" & vbNewLine & _
+"				,SUM(ecn.TOTAL) / SUM(ecn.CANTIDAD) AS hora" & vbNewLine & _
+"				,SUM(ecn.TOTAL) AS MONTO_EXT" & vbNewLine & _
+"				,SUM(ecn.CANTIDAD) AS horasmes" & vbNewLine & _
+"			FROM CRCC01.empleado_conc_nomi AS ecn" & vbNewLine & _
+"				INNER JOIN CRCC01.nomina_historico AS nh ON ecn.NUMERO_NOMINA = nh.NUMERO_NOMINA" & vbNewLine & _
+"					AND ecn.NOMINA = nh.NOMINA" & vbNewLine & _
+"			WHERE ecn.nomina = 'QUIN'" & vbNewLine & _
+"				AND ecn.CONCEPTO in ('QUIN-B005','QUIN-B011','QUIN-B015','QUIN-B023')" & vbNewLine & _
+"				AND ecn.numero_nomina BETWEEN 117 AND 200" & vbNewLine & _
+"				AND ecn.EMPLEADO IN (" & vbNewLine & _
+"					SELECT DISTINCT EMPLEADO FROM CRCC01.empleado_conc_nomi" & vbNewLine & _
+"					WHERE nomina = 'QUIN' AND concepto in ('QUIN-B005','QUIN-B011','QUIN-B015','QUIN-B023')" & vbNewLine & _
+"					)" & vbNewLine & _
+"			GROUP BY ecn.EMPLEADO" & vbNewLine & _
+"				,CONVERT(CHAR(4),YEAR(nh.FECHA_INICIO)) + CONVERT(CHAR(2),MONTH(nh.FECHA_INICIO))" & vbNewLine & _
+"		) as b on a.EMPLEADO = b.EMPLEADO" & vbNewLine & _
+"	) as C" & vbNewLine & _
+"	pivot" & vbNewLine & _
+"	(sum(MONTO_EXT) for mes in ([201910],[201911],[201912],[20201],[20202],[20203],[20204],[20205],[20206],[20207],[20208],[20209])) as pvt" & vbNewLine & _
+") as MON on HOR.DEPARTAMENTO = MON.DEPARTAMENTO" & vbNewLine & _
+"			AND	HOR.SECCION = MON.SECCION" & vbNewLine & _
+"			AND	HOR.PUESTO = MON.PUESTO" & vbNewLine & _
+"			AND	HOR.EMPLEADO = MON.EMPLEADO" & vbNewLine & _
+""
+
+----------------------------------------------------------------------------------------------------------------------
+query para Reporte de planilla mensual
+----------------------------------------------------------------------------------------------------------------------
+                "use SOFTLAND" & vbNewLine &
+                "" & vbNewLine &
+                "DECLARE @anio as int" & vbNewLine &
+                "declare @mes as int" & vbNewLine &
+                "" & vbNewLine &
+                "set @anio = " & par1.Trim() & vbNewLine &
+                "set @mes = " & par2.Trim() & vbNewLine &
+                "" & vbNewLine &
+                "SELECT * " & vbNewLine &
+                "FROM" & vbNewLine &
+                "(" & vbNewLine &
+                "	SELECT D.DESCRIPCION AS DEPARTAMENTO" & vbNewLine &
+                "		, CC.DESCRIPCION AS CENTRO_COSTO" & vbNewLine &
+                "		, CN.EMPLEADO" & vbNewLine &
+                "		, E.NOMBRE" & vbNewLine &
+                "		, E.SALARIO_REFERENCIA" & vbNewLine &
+                "		--, CN.NUMERO_NOMINA" & vbNewLine &
+                "		, CO.DESCRIPCION AS CONCEPTO" & vbNewLine &
+                "		, SUM(CN.TOTAL) AS TOTAL" & vbNewLine &
+                "	FROM SOFTLAND.CRCC01.EMPLEADO_CONC_NOMI AS CN" & vbNewLine &
+                "		INNER JOIN SOFTLAND.CRCC01.NOMINA_HISTORICO AS NH ON CN.NOMINA = NH.NOMINA AND CN.NUMERO_NOMINA = NH.NUMERO_NOMINA" & vbNewLine &
+                "		INNER JOIN SOFTLAND.CRCC01.EMPLEADO AS E ON CN.EMPLEADO = E.EMPLEADO" & vbNewLine &
+                "		INNER JOIN SOFTLAND.CRCC01.CENTRO_COSTO AS CC ON CN.CENTRO_COSTO = CC.CENTRO_COSTO" & vbNewLine &
+                "		INNER JOIN SOFTLAND.CRCC01.CONCEPTO AS CO ON CN.CONCEPTO = CO.CONCEPTO" & vbNewLine &
+                "		INNER JOIN SOFTLAND.CRCC01.DEPARTAMENTO AS D ON D.DEPARTAMENTO = E.DEPARTAMENTO" & vbNewLine &
+                "	WHERE CN.NOMINA in ('QUIN','EXTR')" & vbNewLine &
+                "		AND CN.NUMERO_NOMINA in (SELECT NUMERO_NOMINA FROM SOFTLAND.CRCC01.NOMINA_HISTORICO " & vbNewLine &
+                "									WHERE YEAR(FECHA_INICIO)=@anio AND MONTH(FECHA_INICIO)=@mes" & vbNewLine &
+                "								)" & vbNewLine &
+                "		AND CO.DESCRIPCION IN (" & vbNewLine &
+                "								'Salario Quincenal'," & vbNewLine &
+                "								'Horas Extras'," & vbNewLine &
+                "								'Subsidio de incapacidad por Maternidad'," & vbNewLine &
+                "								'Subsidio de incapacidad CCSS'," & vbNewLine &
+                "								'Vacaciones'," & vbNewLine &
+                "								'Comisión'," & vbNewLine &
+                "								'Hora Feriado'," & vbNewLine &
+                "								'Hora Extra Feriado'," & vbNewLine &
+                "								'Bonificaciones Empleados'," & vbNewLine &
+                "								'Hora Extra Noche'," & vbNewLine &
+                "								'Horas Feriado Noche'," & vbNewLine &
+                "								'Horas Dia Libre Laborado'," & vbNewLine &
+                "								'Otros Ingresos'," & vbNewLine &
+                "								'Incentivo caddie golf'," & vbNewLine &
+                "								'Horas eventos'," & vbNewLine &
+                "								'Hora extra feriado noche'," & vbNewLine &
+                "								'Incentivo único por balance de comisione'," & vbNewLine &
+                "								'Caja Costarricense Seguro Social'," & vbNewLine &
+                "								'Impuesto sobre la renta'," & vbNewLine &
+                "								'Rebajo por tarjeta de Alimentación'," & vbNewLine &
+                "								'Otras Deducciones'," & vbNewLine &
+                "								'Prestamos Banco Popular'," & vbNewLine &
+                "								'Ahorro obligatorio'," & vbNewLine &
+                "								'Embargo al Salario'," & vbNewLine &
+                "								'Pension Alimenticia'," & vbNewLine &
+                "								'Rebajos ASECOUNTRY'," & vbNewLine &
+                "								'Retencion plan voluntario'," & vbNewLine &
+                "								'Rebajo Curso Manipulación de Alimentos'," & vbNewLine &
+                "								'Deduccion de Zapatos'" & vbNewLine &
+                "							)" & vbNewLine &
+                "	GROUP BY D.DESCRIPCION" & vbNewLine &
+                "		, CC.DESCRIPCION" & vbNewLine &
+                "		, CN.EMPLEADO" & vbNewLine &
+                "		, E.NOMBRE" & vbNewLine &
+                "		, E.SALARIO_REFERENCIA" & vbNewLine &
+                "		, CO.DESCRIPCION" & vbNewLine &
+                ") AS X" & vbNewLine &
+                "PIVOT(SUM(X.TOTAL) FOR X.CONCEPTO IN (" & vbNewLine &
+                "										[Salario Quincenal]," & vbNewLine &
+                "										[Horas Extras]," & vbNewLine &
+                "										[Subsidio de incapacidad por Maternidad]," & vbNewLine &
+                "										[Subsidio de incapacidad CCSS]," & vbNewLine &
+                "										[Vacaciones]," & vbNewLine &
+                "										[Comisión]," & vbNewLine &
+                "										[Hora Feriado]," & vbNewLine &
+                "										[Hora Extra Feriado]," & vbNewLine &
+                "										[Bonificaciones Empleados]," & vbNewLine &
+                "										[Hora Extra Noche]," & vbNewLine &
+                "										[Horas Feriado Noche]," & vbNewLine &
+                "										[Horas Dia Libre Laborado]," & vbNewLine &
+                "										[Otros Ingresos]," & vbNewLine &
+                "										[Incentivo caddie golf]," & vbNewLine &
+                "										[Horas eventos]," & vbNewLine &
+                "										[Hora extra feriado noche]," & vbNewLine &
+                "										[Incentivo único por balance de comisione]," & vbNewLine &
+                "										[Caja Costarricense Seguro Social]," & vbNewLine &
+                "										[Impuesto sobre la renta]," & vbNewLine &
+                "										[Rebajo por tarjeta de Alimentación]," & vbNewLine &
+                "										[Otras Deducciones]," & vbNewLine &
+                "										[Prestamos Banco Popular]," & vbNewLine &
+                "										[Ahorro obligatorio]," & vbNewLine &
+                "										[Embargo al Salario]," & vbNewLine &
+                "										[Pension Alimenticia]," & vbNewLine &
+                "										[Rebajos ASECOUNTRY]," & vbNewLine &
+                "										[Retencion plan voluntario]," & vbNewLine &
+                "										[Rebajo Curso Manipulación de Alimentos]," & vbNewLine &
+                "										[Deduccion de Zapatos]" & vbNewLine &
+                "									)" & vbNewLine &
+                "	) AS XPVT" & vbNewLine &
+                "order by 1,2"

@@ -1,0 +1,170 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="dtsReport" targetNamespace="http://tempuri.org/dtsReport.xsd" xmlns:mstns="http://tempuri.org/dtsReport.xsd" xmlns="http://tempuri.org/dtsReport.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" GeneratorFunctionsComponentClassName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" UserFunctionsComponentName="QueriesTableAdapter" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections>
+          <Connection AppSettingsObjectName="MySettings" AppSettingsPropertyName="rrhhConnectionString" ConnectionStringObject="" IsAppSettingsProperty="true" Modifier="Assembly" Name="rrhhConnectionString (MySettings)" ParameterPrefix="@" PropertyReference="ApplicationSettings.WindowsApplication1.My.MySettings.GlobalReference.Default.rrhhConnectionString" Provider="System.Data.SqlClient" />
+        </Connections>
+        <Tables>
+          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="TB1TableAdapter" GeneratorDataComponentClassName="TB1TableAdapter" Name="TB1" UserDataComponentName="TB1TableAdapter">
+            <MainSource>
+              <DbSource ConnectionRef="rrhhConnectionString (MySettings)" DbObjectType="Unknown" FillMethodModifier="Public" FillMethodName="Fill" GenerateMethods="Both" GenerateShortCommands="false" GeneratorGetMethodName="GetData" GeneratorSourceName="Fill" GetMethodModifier="Public" GetMethodName="GetData" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetData" UserSourceName="Fill">
+                <SelectCommand>
+                  <DbCommand CommandType="Text" ModifiedByUser="true">
+                    <CommandText>SELECT A.SECCION, A.EMPID AS CODIGO, A.NOMBRE, B.JUSTIFICADA, B.fechacal AS CALENDARIO, B.ENTRADA, B.horaentra AS HORARIO,
+	B.horasrebajar AS REBAJO_HORA, B.SALIDA, B.detalle1 AS DET_ENTRA, B.detalle2 AS DET_SALE, B.JUSTIFICACION, B.NUMPAGO
+FROM
+(	SELECT DISTINCT E.empID, E.middleName + ' ' + E.lastName + ' ' + E.firstName AS nombre, s.name as Seccion
+	FROM [CRCC].[DBO].[OHEM] AS E inner join [CRCC].[DBO].[OUDP] as S on S.code = e.dept
+	WHERE (e.U_MARCAREL = 1)
+) AS A INNER JOIN
+(	SELECT justificada, codigo, entrada, horaentra, horasrebajar, salida, detalle1, detalle2, justificacion, fechacal, numpago
+	FROM tbl_marcas_procesadas_act
+	UNION
+	SELECT justificada, codigo, entrada, horaentra, horasrebajar, salida, detalle1, detalle2, justificacion, fechacal, numpago
+	FROM tbl_marcas_procesadas_hist
+) AS B ON RTRIM(LTRIM(B.Codigo)) = RTRIM(LTRIM(A.empID))
+</CommandText>
+                    <Parameters />
+                  </DbCommand>
+                </SelectCommand>
+              </DbSource>
+            </MainSource>
+            <Mappings>
+              <Mapping SourceColumn="SECCION" DataSetColumn="SECCION" />
+              <Mapping SourceColumn="CODIGO" DataSetColumn="CODIGO" />
+              <Mapping SourceColumn="NOMBRE" DataSetColumn="NOMBRE" />
+              <Mapping SourceColumn="JUSTIFICADA" DataSetColumn="JUSTIFICADA" />
+              <Mapping SourceColumn="CALENDARIO" DataSetColumn="CALENDARIO" />
+              <Mapping SourceColumn="ENTRADA" DataSetColumn="ENTRADA" />
+              <Mapping SourceColumn="HORARIO" DataSetColumn="HORARIO" />
+              <Mapping SourceColumn="REBAJO_HORA" DataSetColumn="REBAJO_HORA" />
+              <Mapping SourceColumn="SALIDA" DataSetColumn="SALIDA" />
+              <Mapping SourceColumn="DET_ENTRA" DataSetColumn="DET_ENTRA" />
+              <Mapping SourceColumn="DET_SALE" DataSetColumn="DET_SALE" />
+              <Mapping SourceColumn="JUSTIFICACION" DataSetColumn="JUSTIFICACION" />
+              <Mapping SourceColumn="NUMPAGO" DataSetColumn="NUMPAGO" />
+            </Mappings>
+            <Sources />
+          </TableAdapter>
+        </Tables>
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="dtsReport" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="dtsReport" msprop:Generator_UserDSName="dtsReport">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="TB1" msprop:Generator_TableClassName="TB1DataTable" msprop:Generator_TableVarName="tableTB1" msprop:Generator_TablePropName="TB1" msprop:Generator_RowDeletingName="TB1RowDeleting" msprop:Generator_UserTableName="TB1" msprop:Generator_RowChangingName="TB1RowChanging" msprop:Generator_RowEvHandlerName="TB1RowChangeEventHandler" msprop:Generator_RowDeletedName="TB1RowDeleted" msprop:Generator_RowEvArgName="TB1RowChangeEvent" msprop:Generator_RowChangedName="TB1RowChanged" msprop:Generator_RowClassName="TB1Row">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="SECCION" msprop:Generator_ColumnVarNameInTable="columnSECCION" msprop:Generator_ColumnPropNameInRow="SECCION" msprop:Generator_ColumnPropNameInTable="SECCIONColumn" msprop:Generator_UserColumnName="SECCION">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="20" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="CODIGO" msprop:Generator_ColumnVarNameInTable="columnCODIGO" msprop:Generator_ColumnPropNameInRow="CODIGO" msprop:Generator_ColumnPropNameInTable="CODIGOColumn" msprop:Generator_UserColumnName="CODIGO" type="xs:int" />
+              <xs:element name="NOMBRE" msdata:ReadOnly="true" msprop:Generator_ColumnVarNameInTable="columnNOMBRE" msprop:Generator_ColumnPropNameInRow="NOMBRE" msprop:Generator_ColumnPropNameInTable="NOMBREColumn" msprop:Generator_UserColumnName="NOMBRE" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="122" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="JUSTIFICADA" msdata:ReadOnly="true" msprop:Generator_ColumnVarNameInTable="columnJUSTIFICADA" msprop:Generator_ColumnPropNameInRow="JUSTIFICADA" msprop:Generator_ColumnPropNameInTable="JUSTIFICADAColumn" msprop:Generator_UserColumnName="JUSTIFICADA" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="15" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="CALENDARIO" msdata:ReadOnly="true" msprop:Generator_ColumnVarNameInTable="columnCALENDARIO" msprop:Generator_ColumnPropNameInRow="CALENDARIO" msprop:Generator_ColumnPropNameInTable="CALENDARIOColumn" msprop:Generator_UserColumnName="CALENDARIO" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="ENTRADA" msdata:ReadOnly="true" msprop:Generator_ColumnVarNameInTable="columnENTRADA" msprop:Generator_ColumnPropNameInRow="ENTRADA" msprop:Generator_ColumnPropNameInTable="ENTRADAColumn" msprop:Generator_UserColumnName="ENTRADA" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="HORARIO" msdata:ReadOnly="true" msprop:Generator_ColumnVarNameInTable="columnHORARIO" msprop:Generator_ColumnPropNameInRow="HORARIO" msprop:Generator_ColumnPropNameInTable="HORARIOColumn" msprop:Generator_UserColumnName="HORARIO" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="REBAJO_HORA" msdata:ReadOnly="true" msprop:Generator_ColumnVarNameInTable="columnREBAJO_HORA" msprop:Generator_ColumnPropNameInRow="REBAJO_HORA" msprop:Generator_ColumnPropNameInTable="REBAJO_HORAColumn" msprop:Generator_UserColumnName="REBAJO_HORA" type="xs:double" minOccurs="0" />
+              <xs:element name="SALIDA" msdata:ReadOnly="true" msprop:Generator_ColumnVarNameInTable="columnSALIDA" msprop:Generator_ColumnPropNameInRow="SALIDA" msprop:Generator_ColumnPropNameInTable="SALIDAColumn" msprop:Generator_UserColumnName="SALIDA" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="DET_ENTRA" msdata:ReadOnly="true" msprop:Generator_ColumnVarNameInTable="columnDET_ENTRA" msprop:Generator_ColumnPropNameInRow="DET_ENTRA" msprop:Generator_ColumnPropNameInTable="DET_ENTRAColumn" msprop:Generator_UserColumnName="DET_ENTRA" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="80" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="DET_SALE" msdata:ReadOnly="true" msprop:Generator_ColumnVarNameInTable="columnDET_SALE" msprop:Generator_ColumnPropNameInRow="DET_SALE" msprop:Generator_ColumnPropNameInTable="DET_SALEColumn" msprop:Generator_UserColumnName="DET_SALE" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="80" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="JUSTIFICACION" msdata:ReadOnly="true" msprop:Generator_ColumnVarNameInTable="columnJUSTIFICACION" msprop:Generator_ColumnPropNameInRow="JUSTIFICACION" msprop:Generator_ColumnPropNameInTable="JUSTIFICACIONColumn" msprop:Generator_UserColumnName="JUSTIFICACION" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="150" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="NUMPAGO" msdata:ReadOnly="true" msprop:Generator_ColumnVarNameInTable="columnNUMPAGO" msprop:Generator_ColumnPropNameInRow="NUMPAGO" msprop:Generator_ColumnPropNameInTable="NUMPAGOColumn" msprop:Generator_UserColumnName="NUMPAGO" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="6" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="tblDatosMarcas" msprop:Generator_TableClassName="tblDatosMarcasDataTable" msprop:Generator_TableVarName="tabletblDatosMarcas" msprop:Generator_TablePropName="tblDatosMarcas" msprop:Generator_RowDeletingName="tblDatosMarcasRowDeleting" msprop:Generator_UserTableName="tblDatosMarcas" msprop:Generator_RowChangingName="tblDatosMarcasRowChanging" msprop:Generator_RowEvHandlerName="tblDatosMarcasRowChangeEventHandler" msprop:Generator_RowDeletedName="tblDatosMarcasRowDeleted" msprop:Generator_RowEvArgName="tblDatosMarcasRowChangeEvent" msprop:Generator_RowChangedName="tblDatosMarcasRowChanged" msprop:Generator_RowClassName="tblDatosMarcasRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="TIPO" msprop:Generator_ColumnVarNameInTable="columnTIPO" msprop:Generator_ColumnPropNameInRow="TIPO" msprop:Generator_ColumnPropNameInTable="TIPOColumn" msprop:Generator_UserColumnName="TIPO" type="xs:string" minOccurs="0" />
+              <xs:element name="DIA" msprop:Generator_ColumnVarNameInTable="columnDIA" msprop:Generator_ColumnPropNameInRow="DIA" msprop:Generator_ColumnPropNameInTable="DIAColumn" msprop:Generator_UserColumnName="DIA" type="xs:string" minOccurs="0" />
+              <xs:element name="FECHA" msprop:Generator_ColumnVarNameInTable="columnFECHA" msprop:Generator_ColumnPropNameInRow="FECHA" msprop:Generator_ColumnPropNameInTable="FECHAColumn" msprop:Generator_UserColumnName="FECHA" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="HORARIO" msprop:Generator_ColumnVarNameInTable="columnHORARIO" msprop:Generator_ColumnPropNameInRow="HORARIO" msprop:Generator_ColumnPropNameInTable="HORARIOColumn" msprop:Generator_UserColumnName="HORARIO" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="MARCA" msprop:Generator_ColumnVarNameInTable="columnMARCA" msprop:Generator_ColumnPropNameInRow="MARCA" msprop:Generator_ColumnPropNameInTable="MARCAColumn" msprop:Generator_UserColumnName="MARCA" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="DIFERENCIA" msprop:Generator_ColumnVarNameInTable="columnDIFERENCIA" msprop:Generator_ColumnPropNameInRow="DIFERENCIA" msprop:Generator_ColumnPropNameInTable="DIFERENCIAColumn" msprop:Generator_UserColumnName="DIFERENCIA" type="xs:decimal" minOccurs="0" />
+              <xs:element name="CIRCUNSTANCIA" msprop:Generator_ColumnVarNameInTable="columnCIRCUNSTANCIA" msprop:Generator_ColumnPropNameInRow="CIRCUNSTANCIA" msprop:Generator_ColumnPropNameInTable="CIRCUNSTANCIAColumn" msprop:Generator_UserColumnName="CIRCUNSTANCIA" type="xs:string" minOccurs="0" />
+              <xs:element name="JUSTIFICACION" msprop:Generator_ColumnVarNameInTable="columnJUSTIFICACION" msprop:Generator_ColumnPropNameInRow="JUSTIFICACION" msprop:Generator_ColumnPropNameInTable="JUSTIFICACIONColumn" msprop:Generator_UserColumnName="JUSTIFICACION" type="xs:string" minOccurs="0" />
+              <xs:element name="ID_HORARIO" msprop:Generator_ColumnVarNameInTable="columnID_HORARIO" msprop:Generator_ColumnPropNameInRow="ID_HORARIO" msprop:Generator_ColumnPropNameInTable="ID_HORARIOColumn" msprop:Generator_UserColumnName="ID_HORARIO" type="xs:short" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="tblDatosMarcasHist" msprop:Generator_TableClassName="tblDatosMarcasHistDataTable" msprop:Generator_TableVarName="tabletblDatosMarcasHist" msprop:Generator_TablePropName="tblDatosMarcasHist" msprop:Generator_RowDeletingName="tblDatosMarcasHistRowDeleting" msprop:Generator_UserTableName="tblDatosMarcasHist" msprop:Generator_RowChangingName="tblDatosMarcasHistRowChanging" msprop:Generator_RowEvHandlerName="tblDatosMarcasHistRowChangeEventHandler" msprop:Generator_RowDeletedName="tblDatosMarcasHistRowDeleted" msprop:Generator_RowEvArgName="tblDatosMarcasHistRowChangeEvent" msprop:Generator_RowChangedName="tblDatosMarcasHistRowChanged" msprop:Generator_RowClassName="tblDatosMarcasHistRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="DEPARTAMENTO" msprop:Generator_ColumnVarNameInTable="columnDEPARTAMENTO" msprop:Generator_ColumnPropNameInRow="DEPARTAMENTO" msprop:Generator_ColumnPropNameInTable="DEPARTAMENTOColumn" msprop:Generator_UserColumnName="DEPARTAMENTO" type="xs:string" minOccurs="0" />
+              <xs:element name="SECCION" msprop:Generator_ColumnVarNameInTable="columnSECCION" msprop:Generator_ColumnPropNameInRow="SECCION" msprop:Generator_ColumnPropNameInTable="SECCIONColumn" msprop:Generator_UserColumnName="SECCION" type="xs:string" minOccurs="0" />
+              <xs:element name="NOMBRE" msprop:Generator_ColumnVarNameInTable="columnNOMBRE" msprop:Generator_ColumnPropNameInRow="NOMBRE" msprop:Generator_ColumnPropNameInTable="NOMBREColumn" msprop:Generator_UserColumnName="NOMBRE" type="xs:string" minOccurs="0" />
+              <xs:element name="TIPO" msprop:Generator_ColumnVarNameInTable="columnTIPO" msprop:Generator_ColumnPropNameInRow="TIPO" msprop:Generator_ColumnPropNameInTable="TIPOColumn" msprop:Generator_UserColumnName="TIPO" type="xs:string" minOccurs="0" />
+              <xs:element name="DIA" msprop:Generator_ColumnVarNameInTable="columnDIA" msprop:Generator_ColumnPropNameInRow="DIA" msprop:Generator_ColumnPropNameInTable="DIAColumn" msprop:Generator_UserColumnName="DIA" type="xs:string" minOccurs="0" />
+              <xs:element name="FECHA" msprop:Generator_ColumnVarNameInTable="columnFECHA" msprop:Generator_ColumnPropNameInRow="FECHA" msprop:Generator_ColumnPropNameInTable="FECHAColumn" msprop:Generator_UserColumnName="FECHA" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="HORARIO" msprop:Generator_ColumnVarNameInTable="columnHORARIO" msprop:Generator_ColumnPropNameInRow="HORARIO" msprop:Generator_ColumnPropNameInTable="HORARIOColumn" msprop:Generator_UserColumnName="HORARIO" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="MARCA" msprop:Generator_ColumnVarNameInTable="columnMARCA" msprop:Generator_ColumnPropNameInRow="MARCA" msprop:Generator_ColumnPropNameInTable="MARCAColumn" msprop:Generator_UserColumnName="MARCA" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="DIFERENCIA" msprop:Generator_ColumnVarNameInTable="columnDIFERENCIA" msprop:Generator_ColumnPropNameInRow="DIFERENCIA" msprop:Generator_ColumnPropNameInTable="DIFERENCIAColumn" msprop:Generator_UserColumnName="DIFERENCIA" type="xs:decimal" minOccurs="0" />
+              <xs:element name="CIRCUNSTANCIA" msprop:Generator_ColumnVarNameInTable="columnCIRCUNSTANCIA" msprop:Generator_ColumnPropNameInRow="CIRCUNSTANCIA" msprop:Generator_ColumnPropNameInTable="CIRCUNSTANCIAColumn" msprop:Generator_UserColumnName="CIRCUNSTANCIA" type="xs:string" minOccurs="0" />
+              <xs:element name="JUSTIFICACION" msprop:Generator_ColumnVarNameInTable="columnJUSTIFICACION" msprop:Generator_ColumnPropNameInRow="JUSTIFICACION" msprop:Generator_ColumnPropNameInTable="JUSTIFICACIONColumn" msprop:Generator_UserColumnName="JUSTIFICACION" type="xs:string" minOccurs="0" />
+              <xs:element name="NUMPAGO" msprop:Generator_ColumnVarNameInTable="columnNUMPAGO" msprop:Generator_ColumnPropNameInRow="NUMPAGO" msprop:Generator_ColumnPropNameInTable="NUMPAGOColumn" msprop:Generator_UserColumnName="NUMPAGO" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="tblEmpleadosSinHorario" msprop:Generator_TableClassName="tblEmpleadosSinHorarioDataTable" msprop:Generator_TableVarName="tabletblEmpleadosSinHorario" msprop:Generator_TablePropName="tblEmpleadosSinHorario" msprop:Generator_RowDeletingName="tblEmpleadosSinHorarioRowDeleting" msprop:Generator_UserTableName="tblEmpleadosSinHorario" msprop:Generator_RowChangingName="tblEmpleadosSinHorarioRowChanging" msprop:Generator_RowEvHandlerName="tblEmpleadosSinHorarioRowChangeEventHandler" msprop:Generator_RowDeletedName="tblEmpleadosSinHorarioRowDeleted" msprop:Generator_RowEvArgName="tblEmpleadosSinHorarioRowChangeEvent" msprop:Generator_RowChangedName="tblEmpleadosSinHorarioRowChanged" msprop:Generator_RowClassName="tblEmpleadosSinHorarioRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="DEPARTAMENTO" msprop:Generator_ColumnVarNameInTable="columnDEPARTAMENTO" msprop:Generator_ColumnPropNameInRow="DEPARTAMENTO" msprop:Generator_ColumnPropNameInTable="DEPARTAMENTOColumn" msprop:Generator_UserColumnName="DEPARTAMENTO" type="xs:string" minOccurs="0" />
+              <xs:element name="SECCION" msprop:Generator_ColumnVarNameInTable="columnSECCION" msprop:Generator_ColumnPropNameInRow="SECCION" msprop:Generator_ColumnPropNameInTable="SECCIONColumn" msprop:Generator_UserColumnName="SECCION" type="xs:string" minOccurs="0" />
+              <xs:element name="EMPID" msprop:Generator_ColumnVarNameInTable="columnEMPID" msprop:Generator_ColumnPropNameInRow="EMPID" msprop:Generator_ColumnPropNameInTable="EMPIDColumn" msprop:Generator_UserColumnName="EMPID" type="xs:string" minOccurs="0" />
+              <xs:element name="NOMBRE" msprop:Generator_ColumnVarNameInTable="columnNOMBRE" msprop:Generator_ColumnPropNameInRow="NOMBRE" msprop:Generator_ColumnPropNameInTable="NOMBREColumn" msprop:Generator_UserColumnName="NOMBRE" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+    <xs:unique name="Constraint1" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//mstns:TB1" />
+      <xs:field xpath="mstns:CODIGO" />
+    </xs:unique>
+  </xs:element>
+</xs:schema>
